@@ -1,72 +1,82 @@
-const express = require('express');
-const bodyParser = require('body-parser'); // Для обработки тела запросов
-const app = express();
-const port = 3000;
+const express = require("express");
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config();
 
-// Массив данных
-let arr = [
-  {
-    id: 1,
-    title: "F",
-    description: "asdasdadasd",
-    figure: "circle"
-  }
+const app = express();
+const port = process.env.PORT || 3000;
+const SECRET_KEY = process.env.SECRET_KEY;
+
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("Подключение к базе данных успешно"))
+  .catch(err => console.error("Ошибка подключения к базе данных:", err));
+
+// Модель данных
+const DataSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  figure: { type: String, required: true }
+});
+
+const DataModel = mongoose.model("Data", DataSchema);
+
+// Массив пользователей
+const users = [
+  { username: "admin", password: "$2b$10$W1r7LZt5VrPpXPyHvWrvNOE9Xa7D48hHzMugpxh3wrzYmW7OnAkWG" }, // пароль "123456"
+  { username: "user", password: "$2b$10$dmMIOzTnCsB5kHfayUatpe67dhcwlYCU2GxbyNmQY6qBVO69IW1Dm" } // пароль "password"
 ];
 
-// Middleware для обработки JSON
-app.use(bodyParser.json());
+// Middleware
+app.use(express.json());
 
-// Middleware для добавления заголовков CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Разрешить запросы с любого источника
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Разрешенные методы
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // Разрешенные заголовки
-  next();
-});
-
-// Базовый маршрут (GET)
-app.get('/', (req, res) => {
-  res.send(arr);
-});
-
-// POST: Добавление нового элемента
-app.post('/', (req, res) => {
-  const { id, title, description, figure } = req.body;
-  if (!id || !title || !description || !figure) {
-    return res.status(400).send({ message: "Все поля обязательны!" });
+// Middleware для проверки токена
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    return res.status(401).json({ message: "Токен не предоставлен" });
   }
-  arr.push({ id, title, description, figure });
-  res.status(201).send({ message: "Элемент добавлен", arr });
+
+  const token = authHeader.split(" ")[1];
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.status(403).json({ message: "Неверный или истёкший токен" });
+    }
+    req.user = user;
+    next();
+  });
+}
+
+// Маршрут для входа
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find((u) => u.username === username);
+  if (!user) {
+    return res.status(401).json({ message: "Неверное имя пользователя или пароль" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Неверное имя пользователя или пароль" });
+  }
+
+  const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: "1h" });
+
+  res.json({ message: "Вход успешен", token });
 });
 
-// PUT: Обновление элемента по ID
-app.put('/:id', (req, res) => {
-  const { id } = req.params;
+// Защищённые маршруты
+app.get("/data", authenticateToken, async (req, res) => {
+  const data = await DataModel.find();
+  res.json(data);
+});
+
+app.post("/data", authenticateToken, async (req, res) => {
   const { title, description, figure } = req.body;
-  const index = arr.findIndex(item => item.id === parseInt(id));
-
-  if (index === -1) {
-    return res.status(404).send({ message: "Элемент не найден" });
-  }
-
-  if (title) arr[index].title = title;
-  if (description) arr[index].description = description;
-  if (figure) arr[index].figure = figure;
-
-  res.send({ message: "Элемент обновлен", arr });
-});
-
-// DELETE: Удаление элемента по ID
-app.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const index = arr.findIndex(item => item.id === parseInt(id));
-
-  if (index === -1) {
-    return res.status(404).send({ message: "Элемент не найден" });
-  }
-
-  arr.splice(index, 1);
-  res.send({ message: "Элемент удален", arr });
+  const newData = new DataModel({ title, description, figure });
+  const savedData = await newData.save();
+  res.status(201).json(savedData);
 });
 
 // Запуск сервера
