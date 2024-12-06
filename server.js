@@ -1,5 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser'); // Для обработки тела запросов
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
@@ -7,10 +7,16 @@ const port = 3000;
 let arr = [
   {
     id: 1,
-    title: "F",
-    description: "asdasdadasd",
-    figure: "circle"
-  }
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach that includes close cooperation with the client at every stage. We adhere to transparency and open communication. You will always be aware of the process and will be able to make any desired changes.",
+      ru: "Мы используем комплексный подход, включающий в себя тесное сотрудничество с клиентом на каждом этапе. Мы придерживаемся прозрачности и открытого общения. Вы всегда будете в курсе процесса и сможете внести любые желаемые изменения.",
+    },
+    figure: "figure-1",
+  },
 ];
 
 // Middleware для обработки JSON
@@ -18,9 +24,9 @@ app.use(bodyParser.json());
 
 // Middleware для добавления заголовков CORS
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Разрешить запросы с любого источника
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Разрешенные методы
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // Разрешенные заголовки
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
@@ -35,6 +41,12 @@ app.post('/', (req, res) => {
   if (!id || !title || !description || !figure) {
     return res.status(400).send({ message: "Все поля обязательны!" });
   }
+
+  // Проверяем наличие вложенных объектов
+  if (!title.eng || !title.ru || !description.eng || !description.ru) {
+    return res.status(400).send({ message: "Заголовок и описание должны содержать значения для eng и ru." });
+  }
+
   arr.push({ id, title, description, figure });
   res.status(201).send({ message: "Элемент добавлен", arr });
 });
@@ -49,9 +61,22 @@ app.put('/:id', (req, res) => {
     return res.status(404).send({ message: "Элемент не найден" });
   }
 
-  if (title) arr[index].title = title;
-  if (description) arr[index].description = description;
-  if (figure) arr[index].figure = figure;
+  // Обновляем только переданные значения
+  if (title) {
+    arr[index].title = {
+      ...arr[index].title,
+      ...title, // Перезаписываем только изменённые языковые версии
+    };
+  }
+  if (description) {
+    arr[index].description = {
+      ...arr[index].description,
+      ...description, // Перезаписываем только изменённые языковые версии
+    };
+  }
+  if (figure) {
+    arr[index].figure = figure;
+  }
 
   res.send({ message: "Элемент обновлен", arr });
 });
