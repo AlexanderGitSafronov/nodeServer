@@ -20,7 +20,103 @@ let arr = [
     },
     figure: "figure-1",
   },
-  // Другие элементы...
+  {
+    id: 2,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+  {
+    id: 3,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+  {
+    id: 4,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+  {
+    id: 5,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+  {
+    id: 6,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+  {
+    id: 7,
+    tags: {
+      ru: ["Телеграм", "API"],
+      eng: ["Telegram", "API"],
+    },
+    title: {
+      eng: "Website development",
+      ru: "Разработка сайтов",
+    },
+    description: {
+      eng: "We use a comprehensive approach...",
+      ru: "Мы используем комплексный подход...",
+    },
+    figure: "figure-1",
+  },
+ 
 ];
 
 // Middleware для обработки JSON
