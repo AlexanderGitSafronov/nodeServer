@@ -8,14 +8,14 @@ let arr = [
     id: 1,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -24,14 +24,14 @@ let arr = [
     id: 2,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -40,14 +40,14 @@ let arr = [
     id: 3,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -56,14 +56,14 @@ let arr = [
     id: 4,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -72,14 +72,14 @@ let arr = [
     id: 5,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -88,14 +88,14 @@ let arr = [
     id: 6,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -104,14 +104,14 @@ let arr = [
     id: 7,
     tags: {
       ru: ["Телеграм", "API"],
-      eng: ["Telegram", "API"],
+      en: ["Telegram", "API"],
     },
     title: {
-      eng: "Website development",
+      en: "Website development",
       ru: "Разработка сайтов",
     },
     description: {
-      eng: "We use a comprehensive approach...",
+      en: "We use a comprehensive approach...",
       ru: "Мы используем комплексный подход...",
     },
     figure: "figure-1",
@@ -144,7 +144,7 @@ app.post('/', (req, res) => {
   }
 
   // Проверяем наличие вложенных объектов
-  if (!tags.ru || !tags.eng || !title.eng || !title.ru || !description.eng || !description.ru) {
+  if (!tags.ru || !tags.en || !title.en || !title.ru || !description.en || !description.ru) {
     return res.status(400).send({ message: "Все вложенные значения должны быть указаны (tags, title, description)." });
   }
 
